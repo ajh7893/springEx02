@@ -37,8 +37,8 @@
 					
 					<c:forEach items="${list }" var="board">
 					<tr>
-						<td><c:out value="${board.bno }"/></td>
-							<td><c:out value="${board.title }"/></td>
+							<td><a href='/board/get?bno=<c:out value="${board.bno}"/>'><c:out value="${board.title}"/></a></td>
+							<%-- <c:out value="${board.title }"/></a></td> --%>
 							<td><c:out value="${board.writer }"/></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd" value = "${board.regdate }"/></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate }"/></td>
@@ -46,7 +46,7 @@
 					</c:forEach>
 				</table>
 				<!-- 모달 알림창 -->
-				<div class="modal fade" id="myMdal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -71,7 +71,26 @@
 <!-- /.row -->
 <script type="text/javascript">
 	$(document).ready(function(){
+		
 		var result = '<c:out value="${result}"/>';
+		
+		checkModal(result);
+		
+		//뒤로가기 하면 스텍에 list.jsp, register.jsp가 쌓임
+		history.replaceState({},null,null);
+		
+		function checkModal(result){
+							//뒤로가기할세.. 히스토리상
+			if(result ===''||history.state ){return;}
+			if(parseInt(result)>0){
+				$(".modal-body").html("게시글"+parseInt(result)+ "번이 등록 되었습니다.");
+			}
+			$("#myModal").modal("show");
+		}
+		$("#regBtn").on("click",function(){
+			//버튼을 누르면 등록으로이동하는
+			self.location = "/board/register";
+		});
 	});
 
 </script>
